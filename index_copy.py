@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents import SearchClient
@@ -13,14 +14,18 @@ def upload_documents_batch(client, documents):
             if not result.succeeded:
                 print(f"Failed document key: {result.key}")
 
-# Replace these variables with your Azure Cognitive Search details
-source_endpoint = "source-endpoint"
-source_index_name = "source-index"
-source_key = ""
+# Put these values in a local .env file (or in your environment variables)
+load_dotenv()
 
-target_endpoint = "target-endpoint"
-target_index_name = "target-index"
-target_key = ""
+source_endpoint = os.getenv("SOURCE_ENDPOINT") # full URL
+source_index_name = os.getenv("SOURCE_INDEX_NAME")
+source_key = os.getenv("SOURCE_KEY")
+
+target_endpoint = os.getenv("TARGET_ENDPOINT") # full URL
+target_index_name = os.getenv("TARGET_INDEX_NAME")
+target_key = os.getenv("TARGET_KEY")
+
+print(f"Copying data from source (Endpoint: {source_endpoint}, Index: {source_index_name}) to target (Endpoint: {target_endpoint}, Index: {target_index_name})")
 
 if source_key:
     source_credential = AzureKeyCredential(source_key)
